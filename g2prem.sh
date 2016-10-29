@@ -61,7 +61,6 @@ logFile=~/Library/Logs/com.citrixonline.g2prem.log
 echo "GoToMyPC Removal Tool .:. Log started $(date)\n" > $logFile
 # Remove the temp directory when the script exits even if due to error
 cleanup() {
-	echo "Cleanup Triggered" >> $logFile 2>&1
 	rm ~/Desktop/.g2puninstall.sh >> $logFile 2>&1
 }
 trap "cleanup" EXIT
@@ -96,15 +95,10 @@ fi
 
 if [[ "$userSelect" == "Host" ]]; then
 	logcomment "GoToMyPC Host Selected"
-	if [[ -e "/Library/Application Support/CitrixOnline/GoToMyPC.app/Contents/Helpers/uninstall" ]]; then
-		osascript -e 'do shell script "sudo sh /Library/Application Support/CitrixOnline/GoToMyPC.app/Contents/Helpers/uninstall" with administrator privileges'
-		exit
-	else
-		curl -o ~/Desktop/.g2puninstall https://raw.githubusercontent.com/robotmachine/GoToMyPC-Removal-Tool/master/g2phostuninstall.sh || osascript -e 'display notification "Unable to retrieve uninstall tool." with title "GoToMyPC Removal Tool"'
-		osascript -e 'do shell script "sudo sh ~/Desktop/.g2puninstall.sh" with administrator privileges'
-		rm ~/Desktop/.g2puninstall.sh
-		exit
-	fi
+	curl -o ~/Desktop/.g2puninstall.sh https://raw.githubusercontent.com/robotmachine/GoToMyPC-Removal-Tool/master/g2phostuninstall.sh >> $logFile 2>&1
+	osascript -e 'do shell script "sudo sh $HOME/Desktop/.g2puninstall.sh >> $HOME/Library/Logs/com.citrixonline.g2prem.log 2>&1" with administrator privileges'
+	rm -v ~/Desktop/.g2puninstall.sh >> $logFile 2>&1
+	exit
 fi
 #    @@@@@@   @@ @@                    @@  
 #   @@////@@ /@@//                    /@@  
@@ -118,7 +112,6 @@ if [[ "$userSelect" == "Client" ]]; then
 	logcomment "Delete Plists"
 	find ~/Library/Preferences -iname "*gotomypc*" -print0 | xargs -0 -I {} trash {} >> $logFile 2>&1
 	logcomment "Trash using MDFind"
-	mdfind kind:app gotomypc | grep -iv Removal | xargs -I {} trash {} >> $logFile 2>&1
 	appLocations=("/Applications" "$HOME/Applications" "$HOME/Desktop" "$HOME/Library/Application Support/CitrixOnline")
 	for x in ${locations[@]}
 	do
