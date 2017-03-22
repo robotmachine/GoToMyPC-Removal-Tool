@@ -15,7 +15,7 @@
 # /@@  //@@ /@@////  /@@ /@@ /@@/@@   /@@ //@@@@   @@////@@  /@@      /@@    /@@   /@@/@@   /@@ /@@
 # /@@   //@@//@@@@@@ @@@ /@@ /@@//@@@@@@   //@@   //@@@@@@@@ @@@      /@@    //@@@@@@ //@@@@@@  @@@
 # //     //  ////// ///  //  //  //////     //     //////// ///       //      //////   //////  /// 
-# GoToMyPC Removal Tool v.1.0.1
+# GoToMyPC Removal Tool v.1.0.3
 #
 # Description:
 # Removes GoToMyPC Host and client files.
@@ -24,7 +24,7 @@
 # https://github.com/robotmachine/GoToMyPC-Removal-Tool
 #
 # Maintained by:
-# Brian A Carter (robotmachine@gmail.com)
+# Brian A Carter
 #
 #  @@@@@@                   @@         
 # /@////@@           @@@@@ //          
