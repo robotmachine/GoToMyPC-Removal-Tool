@@ -5,6 +5,9 @@ Version 1.0.3
 Just need to download the tool? [Click Here](https://github.com/robotmachine/GoToMyPC-Removal-Tool/releases/download/latest/GoToMyPC-Removal-Tool-latest.zip)  
 
 ## CHANGELOG
+### 17 July, 2017 (v1.0.4)
+* Added upcoming LogMeIn file paths
+
 ### 22 March, 2017 (v1.0.3)
 * Removed references to Citrix
 

@@ -15,7 +15,7 @@
 # /@@  //@@ /@@////  /@@ /@@ /@@/@@   /@@ //@@@@   @@////@@  /@@      /@@    /@@   /@@/@@   /@@ /@@
 # /@@   //@@//@@@@@@ @@@ /@@ /@@//@@@@@@   //@@   //@@@@@@@@ @@@      /@@    //@@@@@@ //@@@@@@  @@@
 # //     //  ////// ///  //  //  //////     //     //////// ///       //      //////   //////  /// 
-# GoToMyPC Removal Tool v.1.0.3
+# GoToMyPC Removal Tool v.1.0.4
 #
 # Description:
 # Removes GoToMyPC Host and client files.
@@ -57,7 +57,7 @@ function trash () {
 }
 #
 # Sets variables for the script.
-logFile=~/Library/Logs/com.citrixonline.g2prem.log
+logFile=~/Library/Logs/com.logmein.g2prem.log
 echo "GoToMyPC Removal Tool .:. Log started $(date)\n" > $logFile
 # Remove the temp directory when the script exits even if due to error
 cleanup() {
@@ -109,12 +109,29 @@ fi
 #  //@@@@@@  @@@/@@//@@@@@@ @@@  /@@  //@@ 
 #   //////  /// //  ////// ///   //    //  
 if [[ "$userSelect" == "Client" ]]; then
-	logcomment "Delete Plists"
-	find ~/Library/Preferences -iname "*gotomypc*" -print0 | xargs -0 -I {} trash {} >> $logFile 2>&1
-	logcomment "Trash using MDFind"
-	appLocations=("/Applications" "$HOME/Applications" "$HOME/Desktop" "$HOME/Library/Application Support/CitrixOnline")
-	for x in ${locations[@]}
-	do
-		trash "$x"/GoToMyPC* >> $logFile 2>&1
-	done
+    #
+    ## Remove PLists
+    logcomment "GoToMyPC Client .:. Delete Plists"
+    gtpPlists=(
+               "com.citrixonline.GoToMyPC.SystemStatusUIHost.plist"
+               "com.logmein.GoToMyPC.SystemStatusUIHost.plist"
+              )
+    for gtpPlist in "${gtpPlists[@]}"; do
+        defaults delete "$gtpPlist" >> $logFile 2>&1
+        defaults -currentHost delete "$gtpPlist" >> $logFile 2>&1
+        trash ~/Library/Preferences/"$gtpPlist"*.plist >> $logFile 2>&1
+        trash ~/Library/Preferences/ByHost/"$gtpPlist"*.plist >> $logFile 2>&1
+    done
+    #
+    ## Remove application files
+    appLocations=(
+                  "/Applications" 
+                  "$HOME/Applications"
+                  "$HOME/Desktop"
+                  "$HOME/Library/Application Support/CitrixOnline"
+                  "$HOME/Library/Application Support/GoToMyPC"
+                 )
+    for appLoc in "${locations[@]}"; do
+        trash "$appLoc"/GoToMyPC* >> $logFile 2>&1
+    done
 fi
